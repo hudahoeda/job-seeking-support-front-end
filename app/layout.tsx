@@ -3,6 +3,7 @@ import { AuthProvider } from "@/lib/auth-context"
 import "./globals.css"
 import type { Metadata } from 'next'
 import { Toaster } from "sonner"
+import { ThemeProvider } from "@/components/theme-provider"
 
 const montserrat = Montserrat({ 
   subsets: ["latin"],
@@ -31,20 +32,19 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={montserrat.variable}>
+    <html lang="en" className={montserrat.variable} suppressHydrationWarning>
       <body className={montserrat.className}>
-        <AuthProvider>
-          {children}
-          <Toaster 
-            richColors 
-            position="top-right"
-            toastOptions={{
-              style: {
-                fontFamily: 'var(--font-montserrat)',
-              },
-            }}
-          />
-        </AuthProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthProvider>
+            {children}
+            <Toaster />
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

@@ -417,7 +417,7 @@ export default function InterviewPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       <Header onLogout={logout} />
       <div className="flex-grow">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -425,7 +425,7 @@ export default function InterviewPage() {
             <div className="flex justify-between items-center">
               <h1 className="text-3xl font-bold">Video Interview</h1>
               <div className="flex items-center gap-4">
-                <div className="text-sm">
+                <div className="text-sm text-muted-foreground">
                   Time Remaining: <span className="font-mono">{formatTimeRemaining(timeRemaining)}</span>
                 </div>
               </div>
@@ -439,11 +439,11 @@ export default function InterviewPage() {
                     <div className="flex flex-col space-y-4">
                       <div className="flex items-center justify-between">
                         <h2 className="text-xl font-semibold">Interview Questions</h2>
-                        <span className="px-3 py-1 bg-gray-100 rounded-full text-sm font-medium">
+                        <span className="px-3 py-1 bg-muted rounded-full text-sm font-medium">
                           Question {currentQuestionIndex + 1} of {questions.length}
                         </span>
                       </div>
-                      
+
                       <div className="flex justify-between items-center">
                         <Button
                           variant="outline"
@@ -461,7 +461,7 @@ export default function InterviewPage() {
                             <div
                               key={index}
                               className={`h-1.5 w-6 rounded-full transition-colors ${
-                                index === currentQuestionIndex ? 'bg-blue-600' : 'bg-gray-200'
+                                index === currentQuestionIndex ? 'bg-primary' : 'bg-muted'
                               }`}
                             />
                           ))}
@@ -480,123 +480,143 @@ export default function InterviewPage() {
                       </div>
                     </div>
 
-                    {/* Question Content */}
-                    <div className="space-y-4 pt-4">
-                      <div className="space-y-2">
-                        <h3 className="text-lg font-medium text-gray-900">
-                          {questions[currentQuestionIndex].title}
-                        </h3>
-                        <p className="text-gray-700 text-lg">
-                          {questions[currentQuestionIndex].question}
-                        </p>
-                        {questions[currentQuestionIndex].tip && (
-                          <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-                            <p className="text-sm text-blue-700">
-                              <span className="font-medium">Tip:</span> {questions[currentQuestionIndex].tip}
-                            </p>
-                          </div>
-                        )}
-                      </div>
+                    {/* Current Question */}
+                    <div ref={questionsRef} className="space-y-4">
+                      <h3 className="text-lg font-semibold">{questions[currentQuestionIndex].title}</h3>
+                      <p className="text-foreground">{questions[currentQuestionIndex].question}</p>
+                      {questions[currentQuestionIndex].tip && (
+                        <p className="text-sm text-muted-foreground">{questions[currentQuestionIndex].tip}</p>
+                      )}
                     </div>
                   </div>
                 </Card>
 
-                <Card className="p-6">
-                  <h2 className="text-xl font-semibold mb-4">Recording Instructions</h2>
-                  <ul className="list-disc pl-6 space-y-2">
-                    <li>Ensure you are in a quiet, well-lit environment</li>
-                    <li>Speak clearly and maintain eye contact with the camera</li>
-                    <li>Maximum recording time: 15 minutes total</li>
-                    <li>Answer all questions in one continuous recording</li>
-                  </ul>
+                {/* Video Preview */}
+                <Card className="p-6 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-xl font-semibold">Video Preview</h2>
+                    {isRecording && (
+                      <div className="flex items-center gap-2">
+                        <div className="h-2 w-2 rounded-full bg-destructive animate-pulse"></div>
+                        <span className="text-sm font-medium">Recording: {formatRecordingTime(recordingTime)}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="relative aspect-video bg-muted rounded-lg overflow-hidden">
+                    {stream ? (
+                      <video
+                        ref={videoRef}
+                        autoPlay
+                        playsInline
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <Video className="h-12 w-12 text-muted-foreground" />
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex flex-wrap gap-4">
+                    {!stream && (
+                      <Button onClick={startCamera} className="flex-1">
+                        Start Camera
+                      </Button>
+                    )}
+                    {stream && !isRecording && !selectedFile && (
+                      <Button onClick={startRecording} className="flex-1">
+                        Start Recording
+                      </Button>
+                    )}
+                    {isRecording && (
+                      <Button onClick={stopRecording} variant="destructive" className="flex-1">
+                        Stop Recording
+                      </Button>
+                    )}
+                  </div>
                 </Card>
               </div>
 
-              <div className="md:col-span-5">
-                <Card className="p-6 sticky top-8">
+              {/* Upload Section */}
+              <div className="md:col-span-5 space-y-6">
+                <Card className="p-6">
                   <div className="space-y-6">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-semibold">Recording Preview</h3>
-                      <div className="text-sm text-muted-foreground">
-                        Attempts remaining: <span className="font-medium text-foreground">{retryCount + 1}</span>
-                      </div>
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-xl font-semibold">Upload Video</h2>
+                      {selectedFile && retryCount > 0 && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleRetry}
+                          className="flex items-center gap-2"
+                        >
+                          <RefreshCcw className="h-4 w-4" />
+                          Retry ({retryCount} left)
+                        </Button>
+                      )}
                     </div>
 
-                    {!stream ? (
-                      <div className="text-center p-8">
-                        <Video className="mx-auto h-12 w-12 text-gray-400" />
-                        <h3 className="mt-2 text-sm font-semibold">Camera not started</h3>
-                        <p className="mt-1 text-sm text-gray-500">Start your camera to begin recording</p>
-                        <Button onClick={startCamera} className="mt-4">
-                          Start Camera
+                    {selectedFile ? (
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-3 text-sm">
+                          <FileVideo className="h-5 w-5 text-muted-foreground" />
+                          <span className="font-medium truncate flex-1">
+                            {selectedFile.name}
+                          </span>
+                          <span className="text-muted-foreground">
+                            {Math.round(selectedFile.size / (1024 * 1024))}MB
+                          </span>
+                        </div>
+
+                        {isVideoTooLarge && (
+                          <Alert variant="destructive">
+                            <AlertDescription>
+                              Video file is too large. Please record a shorter video or try again with lower quality settings.
+                            </AlertDescription>
+                          </Alert>
+                        )}
+
+                        <Button
+                          onClick={handleUpload}
+                          disabled={isUploading || isVideoTooLarge}
+                          className="w-full"
+                        >
+                          {isUploading ? (
+                            <>
+                              <div className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full mr-2"></div>
+                              Uploading...
+                            </>
+                          ) : (
+                            <>
+                              <Upload className="h-4 w-4 mr-2" />
+                              Upload Video
+                            </>
+                          )}
                         </Button>
                       </div>
                     ) : (
-                      <>
-                        <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
-                          <video
-                            ref={videoRef}
-                            autoPlay
-                            playsInline
-                            className={`w-full h-full ${!isRecording && selectedFile ? 'object-contain' : 'object-cover'}`}
-                          />
-                          {isRecording && (
-                            <div className="absolute top-4 right-4 bg-red-500 text-white px-2 py-1 rounded-full text-sm flex items-center gap-2">
-                              <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                              {formatRecordingTime(recordingTime)}
-                            </div>
-                          )}
-                        </div>
-
-                        <div className="flex justify-between items-center">
-                          {!isRecording && !selectedFile && (
-                            <Button onClick={startRecording} disabled={isVideoUploaded} className="w-full">
-                              Start Recording
-                            </Button>
-                          )}
-                          {isRecording && (
-                            <Button onClick={stopRecording} variant="destructive" className="w-full">
-                              Stop Recording
-                            </Button>
-                          )}
-                          {selectedFile && !isUploading && (
-                            <div className="flex gap-4 w-full">
-                              <Button onClick={handleRetry} disabled={retryCount === 0} variant="outline" className="flex-1">
-                                <RefreshCcw className="w-4 h-4 mr-2" />
-                                Retry
-                              </Button>
-                              <Button onClick={handleUpload} className="flex-1">
-                                <Upload className="w-4 h-4 mr-2" />
-                                Upload
-                              </Button>
-                            </div>
-                          )}
-                        </div>
-                      </>
-                    )}
-
-                    {isUploading && (
-                      <div className="text-center">
-                        <FileVideo className="mx-auto h-12 w-12 text-gray-400 animate-pulse" />
-                        <h3 className="mt-2 text-sm font-semibold">Uploading video...</h3>
-                        <p className="mt-1 text-sm text-gray-500">Please wait while we upload your recording</p>
+                      <div className="flex flex-col items-center justify-center py-8 text-center space-y-2">
+                        <Video className="h-12 w-12 text-muted-foreground mb-2" />
+                        <h3 className="font-medium">No video recorded yet</h3>
+                        <p className="text-sm text-muted-foreground max-w-[250px]">
+                          Start your camera and record your response to upload
+                        </p>
                       </div>
                     )}
+                  </div>
+                </Card>
 
-                    {isVideoUploaded && (
-                      <div className="text-center">
-                        <CheckCircle2 className="mx-auto h-12 w-12 text-green-500" />
-                        <h3 className="mt-2 text-sm font-semibold text-green-600">Video uploaded successfully!</h3>
-                      </div>
-                    )}
-
-                    {isVideoTooLarge && (
-                      <Alert variant="destructive">
-                        <AlertDescription>
-                          Your recording is too large (max 100MB). Please try recording a shorter video or at a lower quality.
-                        </AlertDescription>
-                      </Alert>
-                    )}
+                <Card className="p-6">
+                  <div className="space-y-4">
+                    <h2 className="text-lg font-semibold">Recording Tips</h2>
+                    <ul className="space-y-2 text-sm text-muted-foreground">
+                      <li>• Ensure good lighting and clear audio</li>
+                      <li>• Speak clearly and maintain eye contact</li>
+                      <li>• Keep responses concise and focused</li>
+                      <li>• Maximum 5 minutes per question</li>
+                      <li>• You have {retryCount} retries remaining</li>
+                    </ul>
                   </div>
                 </Card>
               </div>

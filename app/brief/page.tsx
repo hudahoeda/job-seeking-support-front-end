@@ -97,13 +97,13 @@ export default function BriefPage() {
   // Show loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-white flex flex-col">
+      <div className="min-h-screen bg-background flex flex-col">
         <Header onLogout={logout} />
         <div className="flex-grow p-8">
           <div className="max-w-4xl mx-auto">
             <Card className="p-8">
               <div className="flex justify-center items-center">
-                <div className="animate-spin h-6 w-6 border-2 border-blue-500 rounded-full border-t-transparent"></div>
+                <div className="animate-spin h-6 w-6 border-2 border-primary rounded-full border-t-transparent"></div>
                 <span className="ml-2">Loading...</span>
               </div>
             </Card>
@@ -117,24 +117,24 @@ export default function BriefPage() {
   // Show completion state if interview is already completed
   if (isVideoUploaded) {
     return (
-      <div className="min-h-screen bg-white flex flex-col">
+      <div className="min-h-screen bg-background flex flex-col">
         <Header onLogout={logout} />
         <div className="flex-grow p-8">
           <div className="max-w-4xl mx-auto space-y-8">
             {/* Add time remaining display */}
             <div className="flex justify-end">
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-muted-foreground">
                 Time Remaining: <span className="font-mono">{formatTimeRemaining(timeRemaining)}</span>
               </div>
             </div>
             
             <Card className="p-8 space-y-6">
               <div className="flex flex-col items-center justify-center text-center space-y-4">
-                <div className="rounded-full bg-green-100 p-3">
-                  <CheckCircle2 className="h-12 w-12 text-green-600" />
+                <div className="rounded-full bg-primary/10 p-3">
+                  <CheckCircle2 className="h-12 w-12 text-primary" />
                 </div>
                 <h2 className="text-2xl font-semibold">Interview Already Completed</h2>
-                <p className="text-gray-600 max-w-md">
+                <p className="text-muted-foreground max-w-md">
                   You have already completed and submitted your video interview. 
                   Thank you for your participation.
                 </p>
@@ -151,14 +151,14 @@ export default function BriefPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       <Header onLogout={logout} />
       <div className="flex-grow">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="space-y-8">
             {/* Add time remaining display */}
             <div className="flex justify-end">
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-muted-foreground">
                 Time Remaining: <span className="font-mono">{formatTimeRemaining(timeRemaining)}</span>
               </div>
             </div>
@@ -195,7 +195,7 @@ export default function BriefPage() {
                     <div>
                       <h4 className="font-semibold">Question 1: Self-Introduction</h4>
                       <p className="italic">&quot;Can you briefly introduce yourself, your background, and what excites you about joining this program?&quot;</p>
-                      <p className="text-sm text-gray-600 mt-1">Tips: Be concise and highlight key details about yourself in 1-2 minutes.</p>
+                      <p className="text-sm text-muted-foreground mt-1">Tips: Be concise and highlight key details about yourself in 1-2 minutes.</p>
                     </div>
 
                     <div>

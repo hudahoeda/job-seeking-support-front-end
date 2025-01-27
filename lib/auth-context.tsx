@@ -136,7 +136,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const token = Cookies.get("token")
       if (token) {
-        const response = await fetch("http://localhost:8000/api/v1/auth/logout", {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/logout`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,

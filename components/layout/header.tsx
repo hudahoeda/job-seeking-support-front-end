@@ -5,6 +5,7 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { UserCircle } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 interface HeaderProps {
   onLogout?: () => void
@@ -14,7 +15,7 @@ export function Header({ onLogout }: HeaderProps) {
   const { user } = useAuth()
 
   return (
-    <nav className="border-b fixed top-0 left-0 right-0 bg-white z-50">
+    <nav className="border-b fixed top-0 left-0 right-0 bg-background z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
@@ -26,23 +27,23 @@ export function Header({ onLogout }: HeaderProps) {
                 height={32}
                 className="h-8 w-8"
               />
-              <span className="text-xl font-bold text-gray-900">Merintis</span>
+              <span className="text-xl font-bold text-foreground">Merintis</span>
             </Link>   
           </div>
           
           <div className="flex items-center space-x-4">
+            <ThemeToggle />
             {user ? (
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
-                  <UserCircle className="h-8 w-8 text-gray-500" />
-                  <span className="text-sm font-medium text-gray-700">
+                  <UserCircle className="h-8 w-8 text-muted-foreground" />
+                  <span className="text-sm font-medium text-foreground">
                     {user.user_data.email}
                   </span>
                 </div>
                 {onLogout && (
                   <Button 
-                    variant="ghost" 
-                    className="text-gray-600 hover:text-gray-900" 
+                    variant="ghost"
                     onClick={onLogout}
                   >
                     Logout
@@ -52,12 +53,12 @@ export function Header({ onLogout }: HeaderProps) {
             ) : (
               <div className="flex items-center space-x-2">
                 <Link href="/login">
-                  <Button variant="ghost" className="text-gray-600 hover:text-gray-900">
+                  <Button variant="ghost">
                     Login
                   </Button>
                 </Link>
                 <Link href="/signup">
-                  <Button className="bg-[#003974] hover:bg-[#002d5a] text-white">
+                  <Button>
                     Sign Up
                   </Button>
                 </Link>
