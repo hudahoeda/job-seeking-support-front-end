@@ -1,22 +1,22 @@
-import { Tektur } from "next/font/google"
+import { Montserrat } from "next/font/google"
 import { AuthProvider } from "@/lib/auth-context"
 import "./globals.css"
 import type { Metadata } from 'next'
 import { Toaster } from "sonner"
 
-const tektur = Tektur({ 
+const montserrat = Montserrat({ 
   subsets: ["latin"],
   display: 'swap',
-  variable: '--font-tektur',
+  variable: '--font-montserrat',
 })
 
 export const metadata: Metadata = {
-  title: 'My Digital Academy',
-  description: 'Digital Learning Platform',
+  title: 'Merintis',
+  description: 'Job Seeking Support Platform',
   icons: {
     icon: [
       {
-        url: 'https://mda-interview.sgp1.cdn.digitaloceanspaces.com/mda-logo.svg',
+        url: 'https://mda-interview.sgp1.cdn.digitaloceanspaces.com/merintis-asset/logo-merintis.svg',
         type: 'image/svg+xml',
       },
     ],
@@ -31,8 +31,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={tektur.variable}>
-      <body className={tektur.className}>
+    <html lang="en" className={montserrat.variable}>
+      <body className={montserrat.className}>
         <AuthProvider>
           {children}
           <Toaster 
@@ -40,7 +40,7 @@ export default function RootLayout({
             position="top-right"
             toastOptions={{
               style: {
-                fontFamily: 'var(--font-tektur)',
+                fontFamily: 'var(--font-montserrat)',
               },
             }}
           />

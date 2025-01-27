@@ -53,7 +53,7 @@ export default function LoginPage() {
         <Card className="w-[400px]">
           <CardHeader className="space-y-4">
             <div className="flex justify-center">
-              <Image src="https://mda-interview.sgp1.cdn.digitaloceanspaces.com/mda-logo.svg" alt="Logo" width={200} height={60} priority />
+              <Image src="https://mda-interview.sgp1.cdn.digitaloceanspaces.com/merintis-asset/logo-merintis.svg" alt="Logo" width={200} height={60} priority />
             </div>
             <CardTitle className="text-2xl text-center">Login</CardTitle>
           </CardHeader>

@@ -11,14 +11,14 @@ export function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-6 md:space-y-0">
           <div className="flex flex-col items-start space-y-4">
             <Image
-              src="https://mda-interview.sgp1.cdn.digitaloceanspaces.com/logo-mandiri.avif"
-              alt="Mandiri Logo"
+              src="https://mda-interview.sgp1.cdn.digitaloceanspaces.com/merintis-asset/logo-merintis-font.svg"
+              alt="Merintis Logo"
               width={145}
               height={42}
               className="h-10 w-auto"
             />
             <div className="text-sm text-gray-600">
-              <p className="font-medium">PT. Mandiri (Persero) Tbk</p>
+              <p className="font-medium">PT. Merintis Kehidupan</p>
               <p>Jl. Jenderal Gatot Subroto Kav. 36-38 Jakarta</p>
               <p>12190 Indonesia</p>
             </div>
@@ -38,13 +38,6 @@ export function Footer() {
                 </svg>
               </Link>
             </div>
-            <Image
-              src="https://mda-interview.sgp1.cdn.digitaloceanspaces.com/images.avif"
-              alt="Life by Mandiri Logo"
-              width={167}
-              height={82}
-              className="h-16 w-auto"
-            />
           </div>
         </div>
       </div>
